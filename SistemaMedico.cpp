@@ -77,6 +77,9 @@ int main(){
 					menuEstandar();
 					cout<<"\ndentro     \n";
 					pausa();
+				}else{
+					cout<<"\nError, datos invalidos\n";
+					pausa();
 				}
 				
 				break;
@@ -114,7 +117,6 @@ void registrarCuentaUsuario(){
 	//Codigo
 	codigo=generarCodigo();
 	userAux.setCodigo(codigo);
-	//clean_stdin();
 	
 	//nombre
 	cout<<"*Ingrese el NOMBRE del Usuario\n->";
@@ -262,7 +264,6 @@ bool confirmarCredencialesEstandar(string usuario, string contrasenia){
 	//var locales
 	bool pasar=false;
 
-	
 	if(usuarios->buscarPorNumCuenta(usuario)){ //busca si existe un Usuario con ese numero de usuario
 		Usuario userAux=usuarios->getObjetoPorNumCuenta(usuario); //de encontrarlo, se obtiene ese usuario y se pasan los datos al usuario auxiliar para validar su contrasenia y tipo
 		
@@ -309,20 +310,20 @@ void menuAdmin(){
 			//crear o eliminar cuentas de usuario
 			case 1:{
 				//var de tiempo de uso del caso 1
-				int opc2=0;
+				int opc1=0;
 				int codigo=0;
 				
 				do{
 					cout<<"*Ingrese 1 para CREAR cuenta de usuario\n\n";
 					cout<<"*Ingrese 2 para ELIMINAR cuenta de usuario\n\n->";
-					cin>>opc2;
+					cin>>opc1;
 					limP();
 					
-				}while(opc2<1 || opc>2);
+				}while(opc1<1 || opc>1);
 				
 				clean_stdin();
 				
-				if(opc2==1){
+				if(opc1==1){
 					registrarCuentaUsuario(); //invocacion de la funcion crear cuenta usuario
 				}else{
 					bool encontrado=false;
@@ -346,6 +347,97 @@ void menuAdmin(){
 						pausa();
 						
 						nUsuarios--; //se decrementa la cantidad de usuarios
+						break; //se detiene el bucle si ya se encontro coincidencia de los credenciales
+					}
+		
+					if(!encontrado){
+						cout<<"\n*Usuario de codigo: "<<codigo<<" no ha sido encontrado en la lista"<<endl;
+						pausa();
+					}
+
+				}
+				
+				break;
+			}
+			
+			case 2:{
+				//var de tiempo de uso del caso 2
+				int opc2=0;
+				int codigo=0;
+				
+				do{
+					cout<<"*Ingrese 1 para ACTIVAR una cuenta de usuario\n\n";
+					cout<<"*Ingrese 2 para DESACTIVAR cuenta de usuario\n\n->";
+					cin>>opc2;
+					limP();
+					
+				}while(opc2<1 || opc>2);
+				
+				clean_stdin();
+				
+				if(opc2==1){
+					
+					bool encontrado=false;
+					Usuario userAux;
+					int posicion=0;
+					
+					cout<<"*Ingrese el codigo del usuario para ACTIVAR su cuenta\n\n->";
+					cin>>codigo;
+					
+					clean_stdin();
+					
+					if(usuarios->buscarPorCodigo(codigo)){ 
+					
+							encontrado=true;
+						
+						posicion=usuarios->getPosicionPorCodigo(codigo);
+						
+						userAux=usuarios->getObjetoPorCodigo(codigo); //se pasa los datos del usuario al auxiliar
+						
+						userAux.setEstado(1); //se modifica el auxiliar
+						
+						usuarios->borrar(posicion); //se borra el original
+						
+						usuarios->insertar(posicion, userAux); //se pasa el auxiliar modificado en la posicion de la lista del usuario eliminado
+						
+						cout<<"\n*Estado de cuenta del usuario con codigo: "<<codigo<<". Ha sido ACTIVADA correctamente"<<endl;
+						pausa();
+
+						break; //se detiene el bucle si ya se encontro coincidencia de los credenciales
+					}
+		
+					if(!encontrado){
+						cout<<"\n*Usuario de codigo: "<<codigo<<" no ha sido encontrado en la lista"<<endl;
+						pausa();
+					}
+					
+				}else{
+					bool encontrado=false;
+					Usuario userAux;
+					int posicion=0;
+					
+					cout<<"*Ingrese el codigo del usuario para DESACTIVAR su cuenta\n\n->";
+					cin>>codigo;
+					
+					clean_stdin();
+					
+					if(usuarios->buscarPorCodigo(codigo)){ 
+					
+						encontrado=true;
+						
+						posicion=usuarios->getPosicionPorCodigo(codigo);
+						
+						userAux=usuarios->getObjetoPorCodigo(codigo); //se pasa los datos del usuario al auxiliar
+						
+						userAux.setEstado(0); //se modifica el auxiliar
+						
+						usuarios->borrar(posicion); //se borra el original
+						
+						usuarios->insertar(posicion, userAux); //se pasa el auxiliar modificado en la posicion de la lista del usuario eliminado
+						
+						cout<<"\n*Estado de cuenta del usuario con codigo: "<<codigo<<". Ha sido DESACTIVADA correctamente"<<endl;
+						pausa();
+
 						break; //se detiene el bucle si ya se encontro coincidencia de los credenciales
 					}
 		

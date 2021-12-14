@@ -1,4 +1,3 @@
-#include <iostream>
 #include "usuario.h"
 
 using namespace std;
@@ -135,6 +134,18 @@ void ListaUsuario::imprimirUsuarios()
         cout << "Nombre: " << reco->user.getNombre() << "\n";
         cout << "nCuenta: " << reco->user.getNumeroCuenta() << "\n";
         cout << "Contrasenia: " << reco->user.getContrasenia() << "\n";
+        
+        if(reco->user.getTipo()=='A'){
+        	cout << "Tipo de cuenta: Admin" << "\n";	
+		}else{
+			cout << "Tipo de cuenta: Estandar" << "\n";	
+		}
+		
+        if(reco->user.getEstado()==1){
+        	cout << "Estado de cuenta: Activa" << "\n";	
+		}else{
+			cout << "Estado de cuenta: Inactiva" << "\n";	
+		}
         reco = reco->sig;
         cout << "\n";
         cout << "\n";
